@@ -1,7 +1,16 @@
-import Greet from './components/Greet';
-import Person from './components/Person';
-import PersonList from './components/PersonList';
-import Status from './components/Status';
+// import Button from '@components/Button';
+// import Container from '@components/Container';
+import Counter from '@components/UseState/Counter';
+// import LoggedIn from '@components/UseState/LoggedIn';
+import User from '@components/UseState/User';
+// import Heading from '@components/Heading';
+// import Input from '@components/Input';
+// import Oscar from '@components/Oscar';
+// import Person from '@components/Person';
+// import PersonList from '@components/PersonList';
+// import Status from '@components/Status';
+// import Greet from '@components/Greet';
+
 function App() {
   const persons = [
     { firstName: 'lakshmi', lastName: 'kanth' },
@@ -11,10 +20,42 @@ function App() {
 
   return (
     <>
-      <Greet name="lakshmi" isLoggedIn={false} messageCount={10} />
+      {/* <Greet name="lakshmi" isLoggedIn={false} messageCount={10} />
       <Person lastName="kanth" firstName="lakshmi" />
       <PersonList persons={persons} />
-      <Status status={'error'} />
+      <Status status={'error'} /> */}
+      {/* 
+      <Heading>
+        <h1>h1 -Hello</h1>
+        <h2>h2 -lakshmi</h2>
+        <h3>h3 -lakshmi</h3>
+        <h4>h4 -lakshmi</h4>
+        <h5>h5 -lakshmi</h5>
+        <h6>h6 -lakshmi</h6>
+      </Heading> */}
+
+      {/* <Oscar>
+        <Heading>Hello </Heading>
+      </Oscar> */}
+
+      {/* <Input
+        handleChange={(e) => {
+          console.log(e);
+        }}
+      /> */}
+
+      {/* <Button
+        handleClick={(e, id) => {
+          console.log('button clicked', e, id);
+        }}
+      />
+
+      <Container styles={{ textDecoration: 'underline', color: 'green' }} />
+
+      <LoggedIn /> */}
+
+      <User />
+      <Counter />
     </>
   );
 }

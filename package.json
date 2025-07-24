@@ -2,6 +2,9 @@
   "name": "react-vite-ts",
   "private": true,
   "version": "0.0.0",
+  "engines": {
+    "node": ">=v20.17.0"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,6 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "path": "^0.12.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
