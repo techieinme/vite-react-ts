@@ -1,8 +1,12 @@
 // import Button from '@components/Button';
 // import Container from '@components/Container';
-import Counter from '@components/UseState/Counter';
+import DemoTheme from '@components/context/DemoTheme';
+import GenericList from '@components/Generic/GenericList';
+import RandomNumber from '@components/Restriction/RandomNumber';
+import MutableRef from '@components/UseRef/MutableRef';
+// import Counter from '@components/UseState/Counter';
 // import LoggedIn from '@components/UseState/LoggedIn';
-import User from '@components/UseState/User';
+// import User from '@components/UseState/User';
 // import Heading from '@components/Heading';
 // import Input from '@components/Input';
 // import Oscar from '@components/Oscar';
@@ -12,10 +16,32 @@ import User from '@components/UseState/User';
 // import Greet from '@components/Greet';
 
 function App() {
-  const persons = [
-    { firstName: 'lakshmi', lastName: 'kanth' },
-    { firstName: 'pari', lastName: 'kanth' },
-    { firstName: 'chandini', lastName: 'kanth' },
+  // const persons = [
+  //   { firstName: 'lakshmi', lastName: 'kanth' },
+  //   { firstName: 'pari', lastName: 'kanth' },
+  //   { firstName: 'chandini', lastName: 'kanth' },
+  // ];
+
+  // const ListItems = ['lakshmi', 'kanth', 'raju'];
+  // const ListItems = [1, 2, 2];
+  const ListItems = [
+    {
+      id: 1,
+      fistName: 'lakshmi',
+      lastName: 'kanth',
+    },
+    {
+      id: 2,
+
+      fistName: 'parinka',
+      lastName: 'kanth',
+    },
+    {
+      id: 3,
+
+      fistName: 'chandini',
+      lastName: 'kanth',
+    },
   ];
 
   return (
@@ -54,8 +80,16 @@ function App() {
 
       <LoggedIn /> */}
 
-      <User />
-      <Counter />
+      {/* <User />
+      <Counter /> */}
+
+      {/* <DemoTheme /> */}
+
+      {/* <MutableRef /> */}
+
+      <GenericList items={ListItems} onClick={(item) => console.log(item)} />
+
+      <RandomNumber value={10} isNegative />
     </>
   );
 }

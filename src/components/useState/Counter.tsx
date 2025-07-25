@@ -1,5 +1,5 @@
 import Button from '@components/Button';
-import { useReducer } from 'react';
+import { Component, useReducer } from 'react';
 
 const initialState = { count: 0 };
 
@@ -53,3 +53,7 @@ const Counter = () => {
 };
 
 export default Counter;
+
+
+
+
