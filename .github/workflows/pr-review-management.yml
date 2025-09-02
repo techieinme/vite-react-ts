@@ -3,9 +3,9 @@ name: PR Review Management
 on:
   pull_request:
     types: [opened, synchronize]
-  issue_comment:
-    types: [created]
   pull_request_review_comment:
+    types: [created]
+  issue_comment:
     types: [created]
   workflow_dispatch:
 
@@ -13,8 +13,8 @@ jobs:
   manage-reviews:
     runs-on: ubuntu-latest
     permissions:
-      issues: write
       pull-requests: write
+      issues: write
 
     steps:
       - uses: actions/checkout@v4
@@ -27,10 +27,10 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci || npm install
-          npm install axios eslint --save-dev
+          npm install eslint axios --save-dev
 
-      # --- Step 1: Gather PR details & comments ---
-      - name: Get PR Details and Comments
+      # --- Step 1: Get PR details ---
+      - name: Get PR Details
         id: pr-details
         uses: actions/github-script@v7
         with:
@@ -38,11 +38,11 @@ jobs:
             let prNumber;
             if (context.eventName === 'pull_request') {
               prNumber = context.payload.pull_request.number;
+            } else if (context.eventName === 'pull_request_review_comment') {
+              prNumber = context.payload.pull_request.number;
             } else if (context.eventName === 'issue_comment') {
               if (!context.payload.issue.pull_request) return;
               prNumber = context.payload.issue.number;
-            } else if (context.eventName === 'pull_request_review_comment') {
-              prNumber = context.payload.pull_request.number;
             } else {
               return;
             }
@@ -68,10 +68,10 @@ jobs:
             const totalComments = issueComments.data.length + reviewComments.data.length;
 
             return JSON.stringify({
-              commentCount: totalComments,
+              prNumber,
               prUrl: pr.data.html_url,
               title: pr.data.title,
-              prNumber,
+              commentCount: totalComments,
               currentReviewers: pr.data.requested_reviewers?.map(r => r.login) || []
             });
 
@@ -80,46 +80,43 @@ jobs:
         run: |
           npx eslint "src/**/*.{ts,tsx}" -f json -o eslint-report.json || true
 
-      # --- Step 3: Comment ESLint issues in PR ---
-      - name: Comment ESLint Issues
+      # --- Step 3: Inline PR Review Comments ---
+      - name: Add Inline ESLint Comments
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
             const path = 'eslint-report.json';
             if (!fs.existsSync(path)) {
-              console.log("No ESLint report generated");
+              console.log("⚠️ No ESLint report found");
               return;
             }
 
             const report = JSON.parse(fs.readFileSync(path, 'utf8'));
-            if (report.length === 0) {
-              console.log("✅ No ESLint issues found");
-              return;
-            }
+            const prNumber = context.payload.pull_request.number;
 
-            let body = "### ⚠️ ESLint Issues Found\n\n";
             for (const file of report) {
-              if (file.messages.length > 0) {
-                body += `**${file.filePath.replace(process.cwd() + '/', '')}**\n`;
-                for (const msg of file.messages) {
-                  body += `- Line ${msg.line}:${msg.column} → ${msg.message} (${msg.ruleId})\n`;
-                }
-                body += "\n";
+              for (const msg of file.messages) {
+                await github.rest.pulls.createReviewComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber,
+                  body: `⚠️ ESLint: ${msg.message} (${msg.ruleId})`,
+                  commit_id: context.payload.pull_request.head.sha,
+                  path: file.filePath.replace(process.cwd() + '/', ''),
+                  line: msg.line,
+                  side: "RIGHT"
+                });
               }
             }
 
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body
-            });
+            if (report.some(f => f.messages.length > 0)) {
+              core.setFailed("❌ ESLint issues detected. Please fix before merging.");
+            } else {
+              console.log("✅ No ESLint issues found");
+            }
 
-            // Mark job as failed so CI blocks merge
-            core.setFailed("ESLint issues detected. Please fix before merging.");
-
-      # --- Step 4: Manage Reviewers ---
+      # --- Step 4: Manage Reviewers if PR has too many comments ---
       - name: Manage Reviewers
         if: ${{ steps.pr-details.outputs.result != '' }}
         uses: actions/github-script@v7
@@ -136,10 +133,6 @@ jobs:
               senior: [
                 { github: 'senior-dev1', slack: 'U123ABC' },
                 { github: 'senior-dev2', slack: 'U456DEF' }
-              ],
-              junior: [
-                { github: 'junior-dev1', slack: 'U789GHI' },
-                { github: 'junior-dev2', slack: 'U012JKL' }
               ]
             };
 
@@ -156,12 +149,11 @@ jobs:
                   reviewers: newReviewers
                 });
 
-                const reviewerMentions = newReviewers.map(r => '@' + r).join(' ');
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: prDetails.prNumber,
-                  body: `👀 High activity detected (${prDetails.commentCount} comments). Requesting senior review from: ${reviewerMentions}`
+                  body: `👀 High activity detected (${prDetails.commentCount} comments). Requesting senior review from: ${newReviewers.map(r => '@' + r).join(' ')}`
                 });
 
                 for (const reviewer of reviewers.senior.filter(r => newReviewers.includes(r.github))) {
