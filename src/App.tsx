@@ -3,8 +3,11 @@
 // import Button from '@components/Button';
 // import DemoTheme from '@components/context/DemoTheme';
 // import GenericList from '@components/Generic/GenericList';
-import BasicFormValidation from '@components/Form/FormValidation';
-import Validation from '@components/Form/Validation';
+// import BasicFormValidation from '@components/Form/FormValidation';
+// import Validation from '@components/Form/Validation';
+import Dashboard from '@components/HOC/Dashboard';
+import WithAuth from '@components/HOC/WithAuth';
+import { UseCallBack } from '@components/UseCallback';
 // import GenericButton from '@components/Html/GenericButton';
 // import GenericInput from '@components/Html/GenericInput';
 // import RandomNumber from '@components/Restriction/RandomNumber';
@@ -49,6 +52,10 @@ function App() {
     },
   ];
 
+  const AuthComponent = WithAuth(Dashboard);
+
+  // const EnhancedProfile = HOCComponent(Profile);
+
   return (
     <>
       {/* <Greet name="lakshmi" isLoggedIn={false} messageCount={10} />
@@ -64,17 +71,14 @@ function App() {
         <h5>h5 -lakshmi</h5>
         <h6>h6 -lakshmi</h6>
       </Heading> */}
-
       {/* <Oscar>
         <Heading>Hello </Heading>
       </Oscar> */}
-
       {/* <Input
         handleChange={(e) => {
           console.log(e);
         }}
       /> */}
-
       {/* <Button
         handleClick={(e, id) => {
           console.log('button clicked', e, id);
@@ -84,18 +88,12 @@ function App() {
       <Container styles={{ textDecoration: 'underline', color: 'green' }} />
 
       <LoggedIn /> */}
-
       {/* <User />
       <Counter /> */}
-
       {/* <DemoTheme /> */}
-
       {/* <MutableRef /> */}
-
       {/* <GenericList items={ListItems} onClick={(item) => console.log(item)} /> */}
-
       {/* <RandomNumber value={10} isNegative /> */}
-
       {/* <GenericButton
         variant={'primary'}
         data-id="1"
@@ -106,9 +104,12 @@ function App() {
       </GenericButton>
 
       <GenericInput /> */}
+      {/* <BasicFormValidation /> */}
+      {/* <Validation /> */}
+      <AuthComponent />
+      {/* <EnhancedProfile name="helo" /> */}
 
-      <BasicFormValidation />
-      <Validation />
+      <UseCallBack />
     </>
   );
 }

@@ -42,19 +42,3 @@ const Validation = () => {
 };
 
 export default Validation;
-
-
-
-
-
-function useUser(initialValue:stirng=false){
-
-
-
-
-  handleLogin = ()=>{
-
-    setLoign
-  }
-
-}
