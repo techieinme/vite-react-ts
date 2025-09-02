@@ -5,6 +5,7 @@
 // import GenericList from '@components/Generic/GenericList';
 // import BasicFormValidation from '@components/Form/FormValidation';
 // import Validation from '@components/Form/Validation';
+import Counter from '@components/Counter';
 import Dashboard from '@components/HOC/Dashboard';
 import WithAuth from '@components/HOC/WithAuth';
 import { UseCallBack } from '@components/UseCallback';
@@ -110,6 +111,7 @@ function App() {
       {/* <EnhancedProfile name="helo" /> */}
 
       <UseCallBack />
+      <Counter initialValue={5} />
     </>
   );
 }
