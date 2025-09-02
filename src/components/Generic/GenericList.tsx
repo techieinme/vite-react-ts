@@ -11,7 +11,7 @@ type listProps<T> = {
 //   items,
 //   onClick,
 // }: listProps<T>) => {
-const GenericList = <T extends { id: number }>({
+const GenericList = <T extends { id: string }>({
   items,
   onClick,
 }: listProps<T>) => {

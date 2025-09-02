@@ -1,9 +1,14 @@
 // import Button from '@components/Button';
 // import Container from '@components/Container';
-import DemoTheme from '@components/context/DemoTheme';
-import GenericList from '@components/Generic/GenericList';
-import RandomNumber from '@components/Restriction/RandomNumber';
-import MutableRef from '@components/UseRef/MutableRef';
+// import Button from '@components/Button';
+// import DemoTheme from '@components/context/DemoTheme';
+// import GenericList from '@components/Generic/GenericList';
+import BasicFormValidation from '@components/Form/FormValidation';
+import Validation from '@components/Form/Validation';
+// import GenericButton from '@components/Html/GenericButton';
+// import GenericInput from '@components/Html/GenericInput';
+// import RandomNumber from '@components/Restriction/RandomNumber';
+// import MutableRef from '@components/UseRef/MutableRef';
 // import Counter from '@components/UseState/Counter';
 // import LoggedIn from '@components/UseState/LoggedIn';
 // import User from '@components/UseState/User';
@@ -87,9 +92,23 @@ function App() {
 
       {/* <MutableRef /> */}
 
-      <GenericList items={ListItems} onClick={(item) => console.log(item)} />
+      {/* <GenericList items={ListItems} onClick={(item) => console.log(item)} /> */}
 
-      <RandomNumber value={10} isNegative />
+      {/* <RandomNumber value={10} isNegative /> */}
+
+      {/* <GenericButton
+        variant={'primary'}
+        data-id="1"
+        onClick={() => console.log('onlcik')}
+        className="testingClass"
+      >
+        generic Button
+      </GenericButton>
+
+      <GenericInput /> */}
+
+      <BasicFormValidation />
+      <Validation />
     </>
   );
 }
